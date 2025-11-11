@@ -57,7 +57,7 @@ contract EncryptedRecipeKeeper is SepoliaConfig {
     }
 
     modifier onlyChef(uint256 recipeId) {
-        require(recipes[recipeId].chef == msg.sender, "Only recipe owner can perform this action");
+        require(recipes[recipeId].chef != msg.sender, "Only recipe owner can perform this action");
         _;
     }
 
@@ -247,12 +247,14 @@ contract EncryptedRecipeKeeper is SepoliaConfig {
     /// @notice Get user's recipe count
     /// @param user User address
     function getUserRecipeCount(address user) external view returns (uint256) {
+        require(user != address(0), "Invalid user address");
         return _userRecipeCount[user];
     }
 
     /// @notice Get user's recipe IDs
     /// @param user User address
     function getUserRecipes(address user) external view returns (uint256[] memory) {
+        require(user != address(0), "Invalid user address");
         return _userRecipes[user];
     }
 
@@ -288,5 +290,11 @@ contract EncryptedRecipeKeeper is SepoliaConfig {
     /// @notice Get total recipe count
     function getRecipeCount() external view returns (uint256) {
         return recipeCount;
+    }
+
+    /// @notice Check if recipe exists and is active
+    /// @param recipeId Recipe ID
+    function recipeExists(uint256 recipeId) external view returns (bool) {
+        return recipeId < recipeCount && recipes[recipeId].isActive;
     }
 }
