@@ -260,8 +260,6 @@ contract EncryptedRecipeKeeper is SepoliaConfig {
 
     /// @notice Delete recipe (only by owner)
     function deleteRecipe(uint256 recipeId) external onlyChef(recipeId) whenNotPaused {
-        require(recipes[recipeId].isActive, "Recipe is already inactive");
-
         recipes[recipeId].isActive = false;
         _userRecipeCount[msg.sender]--;
 
@@ -296,5 +294,12 @@ contract EncryptedRecipeKeeper is SepoliaConfig {
     /// @param recipeId Recipe ID
     function recipeExists(uint256 recipeId) external view returns (bool) {
         return recipeId < recipeCount && recipes[recipeId].isActive;
+    }
+
+    /// @notice Get recipe owner address
+    /// @param recipeId Recipe ID
+    function getRecipeOwner(uint256 recipeId) external view returns (address) {
+        require(recipeId < recipeCount, "Recipe does not exist");
+        return recipes[recipeId].chef;
     }
 }
