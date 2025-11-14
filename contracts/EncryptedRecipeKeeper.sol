@@ -43,7 +43,7 @@ contract EncryptedRecipeKeeper is SepoliaConfig {
     mapping(address => uint256) private _userRecipeCount; // Number of recipes per user
 
     // Events
-    event RecipeSubmitted(uint256 indexed recipeId, address indexed chef, string title, uint256 timestamp);
+    event RecipeSubmitted(uint256 indexed recipeId, address indexed chef, string indexed title, uint256 timestamp);
     event RecipeUpdated(uint256 indexed recipeId, address indexed chef);
     event RecipeDeleted(uint256 indexed recipeId, address indexed chef);
     event Paused(address account);
