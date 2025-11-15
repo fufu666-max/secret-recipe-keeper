@@ -57,7 +57,7 @@ contract EncryptedRecipeKeeper is SepoliaConfig {
     }
 
     modifier onlyChef(uint256 recipeId) {
-        require(recipes[recipeId].chef != msg.sender, "Only recipe owner can perform this action");
+        require(recipes[recipeId].chef == msg.sender, "Only recipe owner can perform this action");
         _;
     }
 
