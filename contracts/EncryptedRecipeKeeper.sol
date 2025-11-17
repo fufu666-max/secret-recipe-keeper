@@ -138,6 +138,9 @@ contract EncryptedRecipeKeeper is SepoliaConfig {
                 if (encryptedIngredientIndices[j] == i) {
                     isEncrypted = true;
                     encryptedAmount = FHE.fromExternal(encryptedAmounts[encryptedAmountIndex], amountProofs[encryptedAmountIndex]);
+                    // Grant access: contract and owner can decrypt (following privateself pattern)
+                    FHE.allowThis(encryptedAmount);
+                    FHE.allow(encryptedAmount, msg.sender);
                     encryptedAmountIndex++;
                     break;
                 }
