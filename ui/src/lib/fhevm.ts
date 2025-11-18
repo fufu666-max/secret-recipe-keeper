@@ -353,36 +353,75 @@ export async function decryptEuint32(
   
   if (isLocalNetwork) {
     console.log('[decryptEuint32] Using LOCAL network decryption (Mock) - following privateself pattern');
-    
+
     // Get Mock instance (following privateself project pattern)
     const mockInstance = fhevm || await getFHEVMInstance(chainId);
-    
+
     if (!mockInstance) {
       throw new Error("Mock FHEVM instance not available for local network");
     }
-    
+
     console.log('[decryptEuint32] Mock instance methods:', {
       hasGenerateKeypair: typeof mockInstance.generateKeypair === 'function',
       hasUserDecrypt: typeof mockInstance.userDecrypt === 'function',
       methods: Object.getOwnPropertyNames(Object.getPrototypeOf(mockInstance)),
     });
-    
+
+    // Ensure generateKeypair method exists (needed for EIP712 signature)
+    if (typeof mockInstance.generateKeypair !== 'function') {
+      console.log('[decryptEuint32] Adding generateKeypair to Mock instance...');
+      (mockInstance as any).generateKeypair = () => ({
+        publicKey: new Uint8Array(32).fill(0),
+        privateKey: new Uint8Array(32).fill(0),
+      });
+      console.log('[decryptEuint32] ✅ Added generateKeypair method');
+    }
+
+    // Use instance.userDecrypt method (following privateself project pattern)
+    // Even for local network, we need to create EIP712 signature
+    const keypair = mockInstance.generateKeypair();
+    const contractAddresses = [contractAddress];
+    const startTimeStamp = Math.floor(Date.now() / 1000).toString();
+    const durationDays = "10";
+
+    // Create EIP712 typed data for decryption request
+    const eip712 = mockInstance.createEIP712(
+      keypair.publicKey,
+      contractAddresses,
+      startTimeStamp,
+      durationDays
+    );
+
+    // Sign the EIP712 message
+    const signature = await signer.signTypedData(
+      eip712.domain,
+      { UserDecryptRequestVerification: eip712.types.UserDecryptRequestVerification },
+      eip712.message
+    );
+
+    console.log('[Decrypt] Decrypting with instance.userDecrypt (Mock)...', {
+      contractAddress,
+      handle,
+      userAddress,
+    });
+
+    // Use userDecrypt method (same as privateself project)
     const result = await mockInstance.userDecrypt(
       [{ handle, contractAddress }],
-      new Uint8Array(32).fill(0),
-      new Uint8Array(32).fill(0),
-      "",
-      [contractAddress],
+      keypair.privateKey,
+      keypair.publicKey,
+      signature.replace("0x", ""),
+      contractAddresses,
       userAddress,
-      Math.floor(Date.now() / 1000).toString(),
-      "10"
+      startTimeStamp,
+      durationDays
     );
-    
+
     const value = result[handle];
     if (value === undefined) {
       throw new Error(`Decryption failed: No value returned for handle ${handle}`);
     }
-    
+
     console.log('[Decrypt] Decrypted value:', value);
     return Number(value);
   } else if (isSepoliaNetwork) {
