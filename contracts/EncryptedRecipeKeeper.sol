@@ -268,25 +268,25 @@ contract EncryptedRecipeKeeper is SepoliaConfig {
         recipes[recipeId].isActive = false;
         _userRecipeCount[msg.sender]--;
 
-        emit RecipeDeleted(recipeId, msg.sender);
+        emit RecipeDeleted(recipeId, msg.sender, block.timestamp);
     }
 
     /// @notice Pause contract operations (only owner)
     function pause() external onlyOwner whenNotPaused {
         paused = true;
-        emit Paused(msg.sender);
+        emit Paused(msg.sender, block.timestamp);
     }
 
     /// @notice Unpause contract operations (only owner)
     function unpause() external onlyOwner whenPaused {
         paused = false;
-        emit Unpaused(msg.sender);
+        emit Unpaused(msg.sender, block.timestamp);
     }
 
     /// @notice Transfer ownership to new owner (only owner)
     function transferOwnership(address newOwner) external onlyOwner {
         require(newOwner != address(0), "New owner cannot be zero address");
-        emit OwnershipTransferred(owner, newOwner);
+        emit OwnershipTransferred(owner, newOwner, block.timestamp);
         owner = newOwner;
     }
 
