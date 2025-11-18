@@ -44,11 +44,11 @@ contract EncryptedRecipeKeeper is SepoliaConfig {
 
     // Events
     event RecipeSubmitted(uint256 indexed recipeId, address indexed chef, string indexed title, uint256 timestamp);
-    event RecipeUpdated(uint256 indexed recipeId, address indexed chef);
-    event RecipeDeleted(uint256 indexed recipeId, address indexed chef);
-    event Paused(address account);
-    event Unpaused(address account);
-    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
+    event RecipeUpdated(uint256 indexed recipeId, address indexed chef, uint256 timestamp);
+    event RecipeDeleted(uint256 indexed recipeId, address indexed chef, uint256 timestamp);
+    event Paused(address indexed account, uint256 timestamp);
+    event Unpaused(address indexed account, uint256 timestamp);
+    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner, uint256 timestamp);
 
     // Modifiers
     modifier onlyOwner() {
