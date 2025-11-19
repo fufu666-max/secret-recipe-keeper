@@ -61,6 +61,16 @@ const CreateRecipeDialog = () => {
       return;
     }
 
+    if (formData.title.length < 3 || formData.title.length > 100) {
+      toast.error('Recipe title must be between 3-100 characters');
+      return;
+    }
+
+    if (formData.description.length < 10 || formData.description.length > 500) {
+      toast.error('Recipe description must be between 10-500 characters');
+      return;
+    }
+
     // Validate encrypted items limit
     const encryptedIngredientsCount = formData.encryptIngredients.filter(Boolean).length;
     const encryptedStepsCount = formData.encryptSteps.filter(Boolean).length;
