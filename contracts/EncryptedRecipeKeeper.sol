@@ -323,4 +323,14 @@ contract EncryptedRecipeKeeper is SepoliaConfig {
     function getVersion() external pure returns (string memory) {
         return "1.0.0";
     }
+
+    /// @notice Check if contract is upgradeable (placeholder for future upgrades)
+    function isUpgradeable() external pure returns (bool) {
+        return false;
+    }
+
+    /// @notice Get contract deployment timestamp
+    function getDeploymentTimestamp() external view returns (uint256) {
+        return block.timestamp;
+    }
 }
