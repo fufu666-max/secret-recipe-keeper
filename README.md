@@ -15,9 +15,11 @@ Watch the full demonstration: [Demo Video](https://github.com/PrimaClara23/secre
 - **🔒 Fully Homomorphic Encryption**: Protect sensitive recipe data using Zama's FHEVM technology
 - **👨‍🍳 Chef-Owned Data**: Only recipe creators can view and decrypt their encrypted data
 - **📝 Flexible Encryption**: Encrypt up to 2 items (ingredients or steps) per recipe
-- **🌐 Multi-Network Support**: Works on local Hardhat network and Sepolia testnet
+- **🌐 Multi-Network Support**: Works on local Hardhat network (31337) and Sepolia testnet (11155111)
 - **💼 Wallet Integration**: Seamless wallet connection using RainbowKit
 - **🎨 Modern UI**: Beautiful, responsive interface built with React and Tailwind CSS
+- **📊 Analytics**: Contract statistics and user activity monitoring
+- **🔍 Search**: Advanced recipe search and filtering capabilities
 
 ## 🏗️ Architecture
 
