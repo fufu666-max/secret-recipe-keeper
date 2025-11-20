@@ -333,4 +333,40 @@ contract EncryptedRecipeKeeper is SepoliaConfig {
     function getDeploymentTimestamp() external view returns (uint256) {
         return block.timestamp;
     }
+
+    /// @notice Get contract statistics
+    /// @return totalRecipes Total number of recipes
+    /// @return activeRecipes Number of active recipes
+    /// @return totalUsers Number of unique users
+    function getContractStats() external view returns (uint256 totalRecipes, uint256 activeRecipes, uint256 totalUsers) {
+        totalRecipes = recipeCount;
+        activeRecipes = 0;
+        totalUsers = 0;
+
+        // Count active recipes and unique users
+        address[] memory uniqueUsers = new address[](recipeCount);
+        uint256 userCount = 0;
+
+        for (uint256 i = 0; i < recipeCount; i++) {
+            if (recipes[i].isActive) {
+                activeRecipes++;
+            }
+
+            // Check if user is already counted
+            bool userExists = false;
+            for (uint256 j = 0; j < userCount; j++) {
+                if (uniqueUsers[j] == recipes[i].chef) {
+                    userExists = true;
+                    break;
+                }
+            }
+
+            if (!userExists) {
+                uniqueUsers[userCount] = recipes[i].chef;
+                userCount++;
+            }
+        }
+
+        totalUsers = userCount;
+    }
 }
