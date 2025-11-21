@@ -13,6 +13,8 @@ export default defineConfig(({ mode }) => ({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
+      // Alias for types directory - resolves to project root/types
+      "../../types": path.resolve(__dirname, "../types"),
     },
   },
   build: {
