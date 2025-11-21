@@ -15,4 +15,22 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  build: {
+    commonjsOptions: {
+      include: [/types/, /node_modules/],
+      transformMixedEsModules: true,
+    },
+    rollupOptions: {
+      // Ensure ethers is properly resolved
+      output: {
+        manualChunks: undefined,
+      },
+    },
+  },
+  optimizeDeps: {
+    include: ['ethers'],
+    esbuildOptions: {
+      target: 'es2020',
+    },
+  },
 }));

@@ -1,4 +1,6 @@
-import { EncryptedRecipeKeeper__factory } from '../../../types';
+// Import factory - Vite will handle the ethers dependency resolution
+// Path is relative to ui/src/config, going up to project root to access types
+import { EncryptedRecipeKeeper__factory } from '../../../types/factories/contracts/EncryptedRecipeKeeper__factory';
 
 // Contract addresses for different networks
 export const CONTRACT_ADDRESSES = {
@@ -21,5 +23,5 @@ export const getContractAddress = (chainId: number): string => {
   return address;
 };
 
-// Contract ABI
+// Contract ABI - extract from factory
 export const CONTRACT_ABI = EncryptedRecipeKeeper__factory.abi;
